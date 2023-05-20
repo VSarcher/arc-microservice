@@ -1,4 +1,4 @@
-FROM golang:1.12.0-alpine3.9
+FROM golang:1.19
 
 # RUN apk update && apk add --no-cache git
 
@@ -10,6 +10,8 @@ WORKDIR /app
 
 RUN go mod download
 
-RUN go build -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+
+EXPOSE 8080
 
 CMD ["/app/main"]
