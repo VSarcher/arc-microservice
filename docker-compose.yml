@@ -9,3 +9,10 @@ services:
       - .:/usr/src/app
     command:
       - go run cmd/main.go -b 0.0.0.0
+
+  forum-services:
+    build: forum-serive/ .
+    ports:
+     - 5000:5000
+    command:
+     - go run cmd/main.go -b 0.0.0.0
