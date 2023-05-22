@@ -24,6 +24,8 @@ func main() {
 }
 
 func HomeHandler() http.HandlerFunc {
+	// a := models.User{}
+	// fmt.Println(a)
 	return func(rw http.ResponseWriter, r *http.Request) {
 		aa := `{"apple": "app"}`
 		json.NewEncoder(rw).Encode(aa)

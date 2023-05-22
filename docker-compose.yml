@@ -2,8 +2,10 @@ version: '3.8'
 
 services:
   auth-services:
-    # build: .
-    image: vsarcher/auth-service:1.2
+    # image: vsarcher/auth-service:1.2
+    build:
+      context: auth-service
+    env_file: .env
     ports:
       - 3000:3000
     volumes:
@@ -12,11 +14,27 @@ services:
     restart: always
     # command: ./main
 
-  forum-services:
-    image: vsarcher/forum-service:v1.0
+  # forum-services:
+  #   # image: vsarcher/forum-service:v1.0
+  #   build:
+  #     context: forum-service
+  #   env_file: .env
+  #   ports:
+  #    - 5000:8080
+  #   volumes:
+  #     - .:/app
+  #   command: air main.go -b 0.0.0.0
+  #   restart: always
+
+  postgres-db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=${DB_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${DB_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${DB_POSTGRES_NAME}
     ports:
-     - 5000:8080
+      - 5432:5432
     volumes:
-      - .:/app
-    command: air main.go -b 0.0.0.0
-    restart: always
+      - postgres-db:/var/lib/postgresql/data\
+volumes:
+  postgres-db:
