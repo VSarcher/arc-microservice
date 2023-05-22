@@ -23,6 +23,7 @@ func ConnectDB() {
 		os.Getenv("DB_POSTGRES_PASSWORD"),
 		os.Getenv("DB_POSTGRES_NAME"),
 	)
+	fmt.Println(dsn, "dsn")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})

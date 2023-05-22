@@ -1,4 +1,4 @@
-FROM golang:1.19
+FROM golang:1.20
 
 # RUN apk update && apk add --no-cache git
 
@@ -10,7 +10,9 @@ RUN go install github.com/cosmtrek/air@latest
 
 COPY . .
 
-RUN go mod download
+# RUN go mod download
+
+RUN go mod tidy
 
 EXPOSE 3000
 

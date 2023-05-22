@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"auth-service/handlers"
+
 	"github.com/gorilla/mux"
 )
 
@@ -19,6 +21,8 @@ func main() {
 
 	Router := mux.NewRouter()
 	Router.HandleFunc("/", HomeHandler()).Methods("GET")
+
+	Router.HandleFunc("/api/user/", handlers.CreateUser()).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", Router))
 }
