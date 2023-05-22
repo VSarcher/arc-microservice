@@ -2,16 +2,19 @@ FROM golang:1.19
 
 # RUN apk update && apk add --no-cache git
 
-RUN mkdir /app
+# RUN mkdir /app/auth
 
-ADD . /app
+WORKDIR app
 
-WORKDIR /app
+RUN go install github.com/cosmtrek/air@latest
+
+COPY . .
 
 RUN go mod download
 
+EXPOSE 3000
+
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
-EXPOSE 8080
 
-CMD ["/app/main"]
+# CMD ["/app/main"]

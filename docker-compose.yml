@@ -2,17 +2,21 @@ version: '3.8'
 
 services:
   auth-services:
-    build: .
+    # build: .
+    image: vsarcher/auth-service:1.2
     ports:
       - 3000:3000
     volumes:
-      - .:/usr/src/app
-    command:
-      - go run cmd/main.go -b 0.0.0.0
+      - .:/app
+    command: air main.go -b 0.0.0.0
+    restart: always
+    # command: ./main
 
   forum-services:
-    build: forum-serive/ .
+    image: vsarcher/forum-service:v1.0
     ports:
-     - 5000:5000
-    command:
-     - go run cmd/main.go -b 0.0.0.0
+     - 5000:8080
+    volumes:
+      - .:/app
+    command: air main.go -b 0.0.0.0
+    restart: always
