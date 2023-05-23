@@ -2,6 +2,7 @@ package config
 
 import (
 	"auth-service/models"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -17,8 +18,8 @@ type DB_Instance struct {
 
 var PostgresDB DB_Instance
 
-func ConnectDB() {
-	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s sslmode=disable",
+func ConnectDB() error {
+	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s sslmode=disable TimeZone=EST",
 		os.Getenv("DB_POSTGRES_USER"),
 		os.Getenv("DB_POSTGRES_PASSWORD"),
 		os.Getenv("DB_POSTGRES_NAME"),
@@ -31,14 +32,20 @@ func ConnectDB() {
 	if err != nil {
 		log.Fatal("Failed to connect to database", err)
 		os.Exit(2)
+		return errors.New("Failed to connect to database")
 	}
 
 	db.Logger = logger.Default.LogMode(logger.Info)
 
-	db.AutoMigrate(&models.User{})
+	err = db.AutoMigrate(&models.User{})
 
+	if err != nil {
+		log.Fatal("Failed to connect to database", err)
+		return errors.New("Error on migrating db schema!")
+	}
+	// fmt.Println("Passed!", err)
 	PostgresDB = DB_Instance{
 		DB: db,
 	}
-
+	return nil
 }

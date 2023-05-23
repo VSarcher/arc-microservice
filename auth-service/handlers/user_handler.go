@@ -2,8 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
 	"net/http"
 
+	"auth-service/config"
 	"auth-service/models"
 )
 
@@ -12,16 +15,19 @@ import (
 
 func CreateUser() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		// vars := mux.Vars(r)
-		// print
-		var newUser models.User
-		json.NewDecoder(r.Body).Decode(newUser)
+		// var newUser models.User
+		newUser := new(models.User)
+		if err := json.NewDecoder(r.Body).Decode(&newUser); err == nil {
+			rw.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(rw).Encode(map[string]string{"status": "error"})
+			log.Fatal("Error on decoding json request")
+		}
 
-		// newUser := models.User{
-		// 	Name:     "apple",
-		// 	Email:    "test@gmail.com",
-		// 	Password: "1234",
-		// }
-		json.NewEncoder(rw).Encode(&newUser)
+		fmt.Println(newUser)
+		config.PostgresDB.DB.Create(&newUser)
+		// fmt.Println(user)
+		// rw.WriteHeader(http.StatusOK)
+		rw.Header().Add("Content-Type", "application/json")
+		json.NewEncoder(rw).Encode(newUser)
 	}
 }

@@ -5,24 +5,20 @@ import (
 	"log"
 	"net/http"
 
+	"auth-service/config"
 	"auth-service/handlers"
 
 	"github.com/gorilla/mux"
 )
 
 func main() {
-	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-	// })
-	// http.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request) {
-	// 	fmt.Fprintf(w, "Hi")
-	// })
-	// log.Fatal(http.ListenAndServe(":8081", nil))
-
+	if err := config.ConnectDB(); err != nil {
+		log.Fatalf("Error in connecting with DB: %s\n", err.Error())
+	}
 	Router := mux.NewRouter()
 	Router.HandleFunc("/", HomeHandler()).Methods("GET")
 
-	Router.HandleFunc("/api/user/", handlers.CreateUser()).Methods("POST")
+	Router.HandleFunc("/api/user/signup", handlers.CreateUser()).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", Router))
 }
