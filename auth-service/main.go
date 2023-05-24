@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"auth-service/config"
 	"auth-service/handlers"
@@ -12,6 +14,8 @@ import (
 )
 
 func main() {
+	fmt.Println(os.Getenv("DB_USER"))
+
 	if err := config.ConnectDB(); err != nil {
 		log.Fatalf("Error in connecting with DB: %s\n", err.Error())
 	}
