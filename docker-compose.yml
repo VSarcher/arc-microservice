@@ -13,16 +13,16 @@ services:
     #   - postgres-db
     # restart: always
 
-  # forum-services:
-  #   # image: vsarcher/forum-service:v1.0
-  #   build:
-  #     context: forum-service
-  #   env_file: .env
-  #   ports:
-  #    - 5000:8080
+  forum-services:
+    # image: vsarcher/forum-service:v1.0
+    build:
+      context: forum-service
+    env_file: .env
+    ports:
+     - 5000:8080
     # volumes:
     #   - .:/app
-  #   command: air main.go -b 0.0.0.0
+    command: air main.go -b 0.0.0.0
   #   restart: always
 
   postgres-db:
