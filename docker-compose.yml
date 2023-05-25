@@ -1,17 +1,17 @@
 version: '3.8'
 
 services:
-  # auth-services:
-  #   # image: vsarcher/auth-service:1.2
-  #   build:
-  #     context: auth-service
-  #   env_file: .env
-  #   ports:
-  #     - 3000:3000
-  #   command: air main.go -b 0.0.0.0
-  #   # depends_on:
-  #   #   - postgres-db
-  #   # restart: always
+  auth-services:
+    # image: vsarcher/auth-service:1.2
+    build:
+      context: auth-service
+    env_file: .env
+    ports:
+      - 3000:3000
+    command: air main.go -b 0.0.0.0
+    # depends_on:
+    #   - postgres-db
+    # restart: always
 
   forum-services:
     # image: vsarcher/forum-service:v1.0
