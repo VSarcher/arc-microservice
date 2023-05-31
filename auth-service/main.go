@@ -11,11 +11,13 @@ import (
 	"auth-service/handlers"
 
 	"github.com/gorilla/mux"
+	"golang.org/x/exp/rand"
 )
 
 func main() {
+	rand.Intn(10)
 	fmt.Println(os.Getenv("DB_USER"))
-	// error handling
+	
 	if err := config.ConnectDB(); err != nil {
 		log.Fatalf("Error in connecting with DB: %s\n", err.Error())
 	}
