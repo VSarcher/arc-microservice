@@ -19,7 +19,7 @@ type DB_Instance struct {
 var PostgresDB DB_Instance
 
 func ConnectDB() error {
-	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s sslmode=disable TimeZone=EST",
+	dsn := fmt.Sprintf("host=postgres-db user=%s password=%s dbname=%s sslmode=disable TimeZone=EST",
 		os.Getenv("DB_POSTGRES_USER"),
 		os.Getenv("DB_POSTGRES_PASSWORD"),
 		os.Getenv("DB_POSTGRES_NAME"),
