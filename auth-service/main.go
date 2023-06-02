@@ -26,6 +26,7 @@ func main() {
 
 	Router.HandleFunc("/", HomeHandler()).Methods("GET")
 	Router.HandleFunc("/api/user/signup", handlers.CreateUser()).Methods("POST")
+	Router.HandleFunc("/api/user/signin", handlers.LoginUser()).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", Router))
 }

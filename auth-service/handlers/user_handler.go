@@ -12,7 +12,8 @@ import (
 // type UserHandler struct {
 // }
 const (
-	ERR_DECODING_JSON = "Error on decoding json request"
+	ERR_DECODING_JSON    = "Error on decoding json request"
+	ERR_RECORD_NOT_FOUND = "Error on retrieving data from table, Not Found"
 )
 
 func CreateUser() http.HandlerFunc {
@@ -22,13 +23,36 @@ func CreateUser() http.HandlerFunc {
 		newUser := new(models.User)
 		if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
 			Api_response(rw, http.StatusInternalServerError, map[string]string{"error": ERR_DECODING_JSON})
-			log.Fatal("Error on decoding json request")
+			log.Println(ERR_DECODING_JSON)
+			return
 		}
 
 		// fmt.Println(newUser)
 		config.PostgresDB.DB.Create(&newUser)
 
-		rw.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(rw).Encode(newUser)
+		// rw.Header().Add("Content-Type", "application/json")
+		// json.NewEncoder(rw).Encode(newUser)
+		Api_response(rw, http.StatusOK, newUser)
+	}
+}
+func LoginUser() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		userInfo := new(models.LoginRequestModel)
+		if err := json.NewDecoder(r.Body).Decode(userInfo); err != nil {
+			Api_response(rw, http.StatusInternalServerError, map[string]string{"error": ERR_DECODING_JSON})
+			log.Println(ERR_DECODING_JSON)
+			return
+		}
+
+		log.Printf("----------------%s\n", userInfo)
+		user := new(models.User)
+		err := config.PostgresDB.DB.Where("email = ?", userInfo.Email).First(&user)
+		log.Println(err)
+		if err != nil {
+			Api_response(rw, http.StatusInternalServerError, map[string]string{"error": ERR_RECORD_NOT_FOUND})
+			log.Println(ERR_RECORD_NOT_FOUND)
+			return
+		}
+		Api_response(rw, http.StatusOK, user)
 	}
 }
