@@ -2,22 +2,22 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"auth-service/config"
 	"auth-service/handlers"
 
 	"github.com/gorilla/mux"
-	"golang.org/x/exp/rand"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	rand.Intn(10)
-	fmt.Println(os.Getenv("DB_USER"))
-	
+	// rand.Intn(10)
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	if err := config.ConnectDB(); err != nil {
 		log.Fatalf("Error in connecting with DB: %s\n", err.Error())
 	}
@@ -34,6 +34,10 @@ func HomeHandler() http.HandlerFunc {
 	// fmt.Println(a)
 	return func(rw http.ResponseWriter, r *http.Request) {
 		aa := `{"apple": "app"}`
-		json.NewEncoder(rw).Encode(aa)
+		jsonResponse, err := json.Marshal(aa)
+		if err != nil {
+			log.Fatalf(err.Error())
+		}
+		json.NewEncoder(rw).Encode(jsonResponse)
 	}
 }
