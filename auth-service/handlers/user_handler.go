@@ -5,12 +5,15 @@ import (
 	"log"
 	"net/http"
 
-	"auth-service/config"
-	"auth-service/models"
+	"github.com/VSarcher/arc-microservice/auth-service/config"
+	"github.com/VSarcher/arc-microservice/auth-service/models"
 )
 
 // type UserHandler struct {
 // }
+const (
+	ERR_DECODING_JSON = "Error on decoding json request"
+)
 
 func CreateUser() http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
@@ -18,8 +21,7 @@ func CreateUser() http.HandlerFunc {
 		// Create New User
 		newUser := new(models.User)
 		if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
-			rw.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(rw).Encode(map[string]string{"status": "error"})
+			Api_response(rw, http.StatusInternalServerError, map[string]string{"error": ERR_DECODING_JSON})
 			log.Fatal("Error on decoding json request")
 		}
 

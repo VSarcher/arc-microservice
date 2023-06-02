@@ -5,25 +5,26 @@ import (
 	"log"
 	"net/http"
 
-	"auth-service/config"
-	"auth-service/handlers"
+	"github.com/VSarcher/arc-microservice/auth-service/config"
+	"github.com/VSarcher/arc-microservice/auth-service/handlers"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
 func main() {
-	// rand.Intn(10)
+	// Load .env file for configuration.
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
 	}
-
+	// Connect Postgres
 	if err := config.ConnectDB(); err != nil {
 		log.Fatalf("Error in connecting with DB: %s\n", err.Error())
 	}
+	// Config Router.
 	Router := mux.NewRouter()
-	Router.HandleFunc("/", HomeHandler()).Methods("GET")
 
+	Router.HandleFunc("/", HomeHandler()).Methods("GET")
 	Router.HandleFunc("/api/user/signup", handlers.CreateUser()).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", Router))

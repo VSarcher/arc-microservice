@@ -1,11 +1,12 @@
 package config
 
 import (
-	"auth-service/models"
 	"errors"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/VSarcher/arc-microservice/auth-service/models"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
