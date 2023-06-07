@@ -9,9 +9,6 @@ import (
 	"github.com/VSarcher/arc-microservice/auth-service/models"
 )
 
-type UserHandler struct {
-}
-
 const (
 	ERR_DECODING_JSON    = "Error on decoding json request"
 	ERR_RECORD_NOT_FOUND = "Error on retrieving data from table, Not Found"
